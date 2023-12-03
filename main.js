@@ -16,8 +16,10 @@ const searchBox = document.querySelector('.search-box');
 
 // Adding an event listener
 searchBox.addEventListener('keypress', event => {
-    if (event.key == 'Enter') {
+    if (event.key == 'Enter' && searchBox.value.trim() !== '') {
         getResults(searchBox.value);
+    } else if (event.key == 'Enter') {
+        alert('Please enter the city name.')
     }
 })
 
@@ -25,7 +27,11 @@ searchBox.addEventListener('keypress', event => {
 const getResults = query => {
     fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
     .then(weather => weather.json())
-    .then(displayResults);
+    .then(displayResults)
+    .catch(err => {
+        console.error(err);
+        alert('An error occurred while fetching data.')
+    })
     console.log(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`);
 }
 
